@@ -17,8 +17,7 @@ class FidoApplet extends Applet {
 
 	// CLA (Class Byte) Definitions
 	private static final byte CLA_PROPRIETARY = (byte) 0x80; // CLA for proprietary commands (logical channel 0, proprietary class)
-	private static final byte CLA_STANDARD    = (byte) 0x00; // CLA for standard ISO/IEC 7816 commands (e.g., SELECT)
-
+	
 	// INS (Instruction Byte) Definitions
 	private static final byte INS_SELECT      = (byte) 0xA4; // Standard INS for selecting files or applets (ISO/IEC 7816-4)
 	private static final byte INS_STORE_PIN   = (byte) 0x20; // INS for storing a PIN during personalisation phase
@@ -34,9 +33,11 @@ class FidoApplet extends Applet {
 	private static final byte STATE_UNWORKABLE  = (byte) 0x44; // Card state: error or blocked, no operations allowed
 
 	// Current card state variable (initialized to STATE_INACTIVE by default)
-	private byte CARD_STATE 					= STATE_INACTIVE;
+	private byte CARD_STATE				 		= STATE_INACTIVE;
 
-
+	private OwnerPIN ownerPIN 					= null;
+	private static final byte PIN_TRY_LIMIT		= (byte) 0x0F;
+	private static final byte MAX_PIN_SIZE		= (byte) 0x0F;
 	/**
 	 * Installs this applet.
 	 * 
@@ -52,6 +53,9 @@ class FidoApplet extends Applet {
 	 * Only this class's install method should create the applet object.
 	 */
 	protected FidoApplet(byte[] bArray, short bOffset, byte bLength) {
+		
+		ownerPIN = new OwnerPIN(PIN_TRY_LIMIT, MAX_PIN_SIZE);
+		
 		register(bArray, ((short) (bOffset + 1)), bArray[bOffset]);
 	}
 
@@ -63,36 +67,56 @@ class FidoApplet extends Applet {
 	 */
 	@Override
 	public void process(APDU apdu) {
-		
-		byte[] apduBuffer = apdu.getBuffer();
-		byte ins = apduBuffer[ISO7816.OFFSET_INS];
-		// Insert your code here
-		if (CARD_STATE == STATE_INACTIVE) {
-			if(ins == INS_SELECT){
-				selectProcessing(apdu);
-			} else if(ins == INS_STORE_PIN){
-				storePinProcessing(apdu);
-			} else{
-				ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+		try {
+			byte[] apduBuffer = apdu.getBuffer();
+			
+			//We should call setIncomingAndReceive as data is present in all the commands.
+			short bytesLeft = (short)(apduBuffer[ISO7816.OFFSET_LC]&(short)0x00FF);
+			short bytesReceived = apdu.setIncomingAndReceive();
+			if(bytesLeft > (short)0 )
+			{
+				bytesLeft -= bytesReceived;
+				bytesReceived = apdu.receiveBytes((short) (ISO7816.OFFSET_CDATA+bytesReceived));
 			}
-		} else if (CARD_STATE == STATE_ACTIVE) {
-			if (ins == INS_VERIFY) {
-		        verifyProcessing(apdu);
-		    } else if (ins == INS_REGISTER) {
-		        registerProcessing(apdu);
-		    } else if (ins == INS_LOGIN) {
-		        loginProcessing(apdu);
-		    } else if (ins == INS_CHANGE_PIN) {
-		        changePinProcessing(apdu);
-		    } else if (ins == INS_DISABLE) {
-		        disableProcessing(apdu);
-		    } else {
-		        ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
-		    }
-		} else if (CARD_STATE == STATE_UNWORKABLE) {
-			ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
-		} else {
-			ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
+			
+			byte ins = apduBuffer[ISO7816.OFFSET_INS];
+			// Insert your code here
+			if (CARD_STATE == STATE_INACTIVE) {
+				if(ins == INS_SELECT){
+					select();
+				} else if(ins == INS_STORE_PIN){
+					storePinProcessing(apdu);
+				} else{
+					ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+				}
+			} else if (CARD_STATE == STATE_ACTIVE) {
+				if(ins == INS_SELECT){
+					select();
+				} else if (ins == INS_VERIFY) {
+			        verifyProcessing(apdu);
+			    } else if (ins == INS_REGISTER) {
+			        registerProcessing(apdu);
+			    } else if (ins == INS_LOGIN) {
+			        loginProcessing(apdu);
+			    } else if (ins == INS_CHANGE_PIN) {
+			        changePinProcessing(apdu);
+			    } else if (ins == INS_DISABLE) {
+			        disableProcessing(apdu);
+			    } else {
+			        ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+			    }
+			} else if (CARD_STATE == STATE_UNWORKABLE) {
+				ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
+			} else {
+				ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
+			}
+		}catch(ISOException e)
+		{
+			ISOException.throwIt(e.getReason());
+		}
+		catch(Exception e)
+		{
+			ISOException.throwIt((short)0x6800);
 		}
 
 	}
@@ -123,13 +147,52 @@ class FidoApplet extends Applet {
 	}
 
 	private void storePinProcessing(APDU apdu) {
-		// TODO Auto-generated method stub
 		
-	}
-
-	private void selectProcessing(APDU apdu) {
-		// TODO Auto-generated method stub
+		byte[] apduBuffer = apdu.getBuffer();
 		
+		byte cla = apduBuffer[ISO7816.OFFSET_CLA];
+		
+		if(cla!=CLA_PROPRIETARY)
+		{
+			ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
+		}
+		
+		//Validate the PIN format.
+		if(apduBuffer[ISO7816.OFFSET_LC] < (byte)0x06
+				||apduBuffer[ISO7816.OFFSET_LC] > (byte)0x0E)
+		{
+			ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+		}
+		byte dataStartOffset = ISO7816.OFFSET_CDATA;
+		
+		byte pinLength = apduBuffer[(short)(dataStartOffset+1)];
+		
+		if(apduBuffer[dataStartOffset] != (byte)0x01
+				||pinLength < (byte)0x04
+				||pinLength > (byte)0x0C)
+		{
+			ISOException.throwIt(ISO7816.SW_WRONG_DATA);
+		}
+		
+		byte iter = 0;
+		byte pinOffset = (byte) (dataStartOffset+2);
+		while(iter<pinLength)
+		{
+			if((byte)(apduBuffer[(byte)(iter+pinOffset)]&0xF0) != (byte)0x30
+					||(byte)(apduBuffer[(byte)(iter+pinOffset)]&0x0F) > (byte)0x09)
+			{
+				ISOException.throwIt(ISO7816.SW_WRONG_DATA);
+				break;
+			}
+			iter++;
+		}
+		
+		JCSystem.beginTransaction();
+		
+		ownerPIN.update(apduBuffer, pinOffset, pinLength);
+		CARD_STATE = STATE_ACTIVE;
+		
+		JCSystem.commitTransaction();
 	}
 
 	@Override

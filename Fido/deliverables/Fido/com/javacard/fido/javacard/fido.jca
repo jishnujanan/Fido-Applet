@@ -1,5 +1,5 @@
 // converted by version  [v25.0]
-// on Sun Jun 08 10:33:35 IST 2025
+// on Sun Jun 08 22:53:01 IST 2025
 
 .package com/javacard/fido {
 	.aid 0x6A:0x66:0x69:0x64:0x6F;
@@ -18,53 +18,73 @@
 		// 0
 		instanceFieldRef byte FidoApplet/CARD_STATE;
 		// 1
-		.classRef FidoApplet;
+		instanceFieldRef 0.9 FidoApplet/ownerPIN;
 		// 2
 		staticMethodRef 0.3.0()V;		// javacard/framework/Applet.<init>()V
 		// 3
 		staticMethodRef FidoApplet/<init>([BSB)V;
 		// 4
-		virtualMethodRef 0.3.2([BSB)V;		// register([BSB)V
+		.classRef FidoApplet;
 		// 5
-		virtualMethodRef 0.10.1()[B;		// getBuffer()[B
+		.classRef 0.9;		// javacard/framework/OwnerPIN
 		// 6
-		staticMethodRef FidoApplet/selectProcessing(Ljavacard/framework/APDU;)V;
-			.descriptor	Ljavacard/framework/APDU;	0.10;
-
+		staticMethodRef 0.9.0(BB)V;		// javacard/framework/OwnerPIN.<init>(BB)V
 		// 7
+		virtualMethodRef 0.3.2([BSB)V;		// register([BSB)V
+		// 8
+		.classRef 0.7;		// javacard/framework/ISOException
+		// 9
+		.classRef 1.2;		// java/lang/Exception
+		// 10
+		virtualMethodRef 0.10.1()[B;		// getBuffer()[B
+		// 11
+		virtualMethodRef 0.10.6()S;		// setIncomingAndReceive()S
+		// 12
+		virtualMethodRef 0.10.3(S)S;		// receiveBytes(S)S
+		// 13
+		virtualMethodRef FidoApplet/select()Z;
+		// 14
 		staticMethodRef FidoApplet/storePinProcessing(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-		// 8
+		// 15
 		staticMethodRef 0.7.1(S)V;		// javacard/framework/ISOException.throwIt(S)V
-		// 9
+		// 16
 		staticMethodRef FidoApplet/verifyProcessing(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-		// 10
+		// 17
 		staticMethodRef FidoApplet/registerProcessing(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-		// 11
+		// 18
 		staticMethodRef FidoApplet/loginProcessing(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-		// 12
+		// 19
 		staticMethodRef FidoApplet/changePinProcessing(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-		// 13
+		// 20
 		staticMethodRef FidoApplet/disableProcessing(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
+		// 21
+		virtualMethodRef 0.7.1()S;		// getReason()S
+		// 22
+		staticMethodRef 0.8.1()V;		// javacard/framework/JCSystem.beginTransaction()V
+		// 23
+		virtualMethodRef 0.9.8([BSB)V;		// update([BSB)V
+		// 24
+		staticMethodRef 0.8.2()V;		// javacard/framework/JCSystem.commitTransaction()V
 	}
 
 	.class  FidoApplet extends 0.3 {		// extends javacard/framework/Applet
 
 		.fields {
-			private byte CARD_STATE 0;		// B
+			private 0.9 ownerPIN 0;		// Ljavacard/framework/OwnerPIN;
+			private byte CARD_STATE 1;		// B
 			private static final byte CLA_PROPRIETARY = -128;		// B
-			private static final byte CLA_STANDARD = 0;		// B
 			private static final byte INS_SELECT = -92;		// B
 			private static final byte INS_STORE_PIN = 32;		// B
 			private static final byte INS_VERIFY = 33;		// B
@@ -75,6 +95,8 @@
 			private static final byte STATE_INACTIVE = 34;		// B
 			private static final byte STATE_ACTIVE = 51;		// B
 			private static final byte STATE_UNWORKABLE = 68;		// B
+			private static final byte PIN_TRY_LIMIT = 15;		// B
+			private static final byte MAX_PIN_SIZE = 15;		// B
 		}
 
 		.publicMethodTable 6 8 {
@@ -95,7 +117,7 @@
 			.stack 4;
 			.locals 0;
 
-				L0:	new 1;		// com/javacard/fido/FidoApplet
+				L0:	new 4;		// com/javacard/fido/FidoApplet
 					aload_0;
 					sload_1;
 					sload_2;
@@ -111,6 +133,15 @@
 					invokespecial 2;		// javacard/framework/Applet.<init>()V
 					bspush 34;
 					putfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
+					aconst_null;
+					putfield_a_this 1;		// reference com/javacard/fido/FidoApplet.ownerPIN
+					aload_0;
+					new 5;		// javacard/framework/OwnerPIN
+					dup;
+					bspush 15;
+					bspush 15;
+					invokespecial 6;		// javacard/framework/OwnerPIN.<init>(BB)V
+					putfield_a 1;		// reference com/javacard/fido/FidoApplet.ownerPIN
 					aload_0;
 					aload_1;
 					sload_2;
@@ -119,93 +150,135 @@
 					aload_1;
 					sload_2;
 					baload;
-					invokevirtual 4;		// register([BSB)V
+					invokevirtual 7;		// register([BSB)V
 					return;
 		}
 
 		.method public process(Ljavacard/framework/APDU;)V 7 {
-			.stack 2;
-			.locals 2;
+			.stack 3;
+			.locals 4;
 
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
 				L0:	aload_1;
-					invokevirtual 5;		// getBuffer()[B
+					invokevirtual 10;		// getBuffer()[B
 					astore_2;
 				L1:	aload_2;
+					sconst_4;
+					baload;
+					sspush 255;
+					sand;
+					sstore_3;
+				L2:	aload_1;
+					invokevirtual 11;		// setIncomingAndReceive()S
+					sstore 4;
+				L3:	sload_3;
+					ifle L5;
+				L4:	sload_3;
+					sload 4;
+					ssub;
+					sstore_3;
+					aload_1;
+					sconst_5;
+					sload 4;
+					sadd;
+					invokevirtual 12;		// receiveBytes(S)S
+					sstore 4;
+				L5:	aload_2;
 					sconst_1;
 					baload;
-					sstore_3;
-				L2:	getfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
+					sstore 5;
+				L6:	getfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
 					bspush 34;
-					if_scmpne L8;
-				L3:	sload_3;
+					if_scmpne L12;
+				L7:	sload 5;
 					bspush -92;
-					if_scmpne L5;
-				L4:	aload_0;
-					aload_1;
-					invokespecial 6;		// com/javacard/fido/FidoApplet.selectProcessing(Ljavacard/framework/APDU;)V
-					goto L23;
-				L5:	sload_3;
+					if_scmpne L9;
+				L8:	aload_0;
+					invokevirtual 13;		// select()Z
+					pop;
+					goto_w L35;
+				L9:	sload 5;
 					bspush 32;
-					if_scmpne L7;
-				L6:	aload_0;
-					aload_1;
-					invokespecial 7;		// com/javacard/fido/FidoApplet.storePinProcessing(Ljavacard/framework/APDU;)V
-					goto L23;
-				L7:	sspush 27904;
-					invokestatic 8;		// javacard/framework/ISOException.throwIt(S)V
-					goto L23;
-				L8:	getfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
-					bspush 51;
-					if_scmpne L20;
-				L9:	sload_3;
-					bspush 33;
 					if_scmpne L11;
 				L10:	aload_0;
 					aload_1;
-					invokespecial 9;		// com/javacard/fido/FidoApplet.verifyProcessing(Ljavacard/framework/APDU;)V
-					goto L23;
-				L11:	sload_3;
-					bspush 34;
-					if_scmpne L13;
-				L12:	aload_0;
-					aload_1;
-					invokespecial 10;		// com/javacard/fido/FidoApplet.registerProcessing(Ljavacard/framework/APDU;)V
-					goto L23;
-				L13:	sload_3;
-					bspush 35;
+					invokespecial 14;		// com/javacard/fido/FidoApplet.storePinProcessing(Ljavacard/framework/APDU;)V
+					goto_w L35;
+				L11:	sspush 27904;
+					invokestatic 15;		// javacard/framework/ISOException.throwIt(S)V
+					goto_w L35;
+				L12:	getfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
+					bspush 51;
+					if_scmpne L26;
+				L13:	sload 5;
+					bspush -92;
 					if_scmpne L15;
 				L14:	aload_0;
-					aload_1;
-					invokespecial 11;		// com/javacard/fido/FidoApplet.loginProcessing(Ljavacard/framework/APDU;)V
-					goto L23;
-				L15:	sload_3;
-					bspush 36;
+					invokevirtual 13;		// select()Z
+					pop;
+					goto L35;
+				L15:	sload 5;
+					bspush 33;
 					if_scmpne L17;
 				L16:	aload_0;
 					aload_1;
-					invokespecial 12;		// com/javacard/fido/FidoApplet.changePinProcessing(Ljavacard/framework/APDU;)V
-					goto L23;
-				L17:	sload_3;
-					bspush 37;
+					invokespecial 16;		// com/javacard/fido/FidoApplet.verifyProcessing(Ljavacard/framework/APDU;)V
+					goto L35;
+				L17:	sload 5;
+					bspush 34;
 					if_scmpne L19;
 				L18:	aload_0;
 					aload_1;
-					invokespecial 13;		// com/javacard/fido/FidoApplet.disableProcessing(Ljavacard/framework/APDU;)V
-					goto L23;
-				L19:	sspush 27904;
-					invokestatic 8;		// javacard/framework/ISOException.throwIt(S)V
-					goto L23;
-				L20:	getfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
+					invokespecial 17;		// com/javacard/fido/FidoApplet.registerProcessing(Ljavacard/framework/APDU;)V
+					goto L35;
+				L19:	sload 5;
+					bspush 35;
+					if_scmpne L21;
+				L20:	aload_0;
+					aload_1;
+					invokespecial 18;		// com/javacard/fido/FidoApplet.loginProcessing(Ljavacard/framework/APDU;)V
+					goto L35;
+				L21:	sload 5;
+					bspush 36;
+					if_scmpne L23;
+				L22:	aload_0;
+					aload_1;
+					invokespecial 19;		// com/javacard/fido/FidoApplet.changePinProcessing(Ljavacard/framework/APDU;)V
+					goto L35;
+				L23:	sload 5;
+					bspush 37;
+					if_scmpne L25;
+				L24:	aload_0;
+					aload_1;
+					invokespecial 20;		// com/javacard/fido/FidoApplet.disableProcessing(Ljavacard/framework/APDU;)V
+					goto L35;
+				L25:	sspush 27904;
+					invokestatic 15;		// javacard/framework/ISOException.throwIt(S)V
+					goto L35;
+				L26:	getfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
 					bspush 68;
-					if_scmpne L22;
-				L21:	sspush 27014;
-					invokestatic 8;		// javacard/framework/ISOException.throwIt(S)V
-					goto L23;
-				L22:	sspush 27014;
-					invokestatic 8;		// javacard/framework/ISOException.throwIt(S)V
-				L23:	return;
+					if_scmpne L28;
+				L27:	sspush 27014;
+					invokestatic 15;		// javacard/framework/ISOException.throwIt(S)V
+					goto L35;
+				L28:	sspush 27014;
+					invokestatic 15;		// javacard/framework/ISOException.throwIt(S)V
+				L29:	goto L35;
+				L30:	astore_2;
+				L31:	aload_2;
+					invokevirtual 21;		// getReason()S
+					invokestatic 15;		// javacard/framework/ISOException.throwIt(S)V
+				L32:	goto L35;
+				L33:	astore_2;
+				L34:	sspush 26624;
+					invokestatic 15;		// javacard/framework/ISOException.throwIt(S)V
+				L35:	return;
+			.exceptionTable {
+				// start_block end_block handler_block catch_type_index
+				L0 L29 L30 8;
+				L0 L29 L33 9;
+			}
 		}
 
 		.method private disableProcessing(Ljavacard/framework/APDU;)V {
@@ -254,21 +327,106 @@
 		}
 
 		.method private storePinProcessing(Ljavacard/framework/APDU;)V {
-			.stack 0;
-			.locals 0;
+			.stack 4;
+			.locals 6;
 
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-				L0:	return;
-		}
-
-		.method private selectProcessing(Ljavacard/framework/APDU;)V {
-			.stack 0;
-			.locals 0;
-
-			.descriptor	Ljavacard/framework/APDU;	0.10;
-
-				L0:	return;
+				L0:	aload_1;
+					invokevirtual 10;		// getBuffer()[B
+					astore_2;
+				L1:	aload_2;
+					sconst_0;
+					baload;
+					sstore_3;
+				L2:	sload_3;
+					bspush -128;
+					if_scmpeq L4;
+				L3:	sspush 28160;
+					invokestatic 15;		// javacard/framework/ISOException.throwIt(S)V
+				L4:	aload_2;
+					sconst_4;
+					baload;
+					bspush 6;
+					if_scmplt L6;
+				L5:	aload_2;
+					sconst_4;
+					baload;
+					bspush 14;
+					if_scmple L7;
+				L6:	sspush 26368;
+					invokestatic 15;		// javacard/framework/ISOException.throwIt(S)V
+				L7:	sconst_5;
+					sstore 4;
+				L8:	aload_2;
+					sload 4;
+					sconst_1;
+					sadd;
+					baload;
+					sstore 5;
+				L9:	aload_2;
+					sload 4;
+					baload;
+					sconst_1;
+					if_scmpne L12;
+				L10:	sload 5;
+					sconst_4;
+					if_scmplt L12;
+				L11:	sload 5;
+					bspush 12;
+					if_scmple L13;
+				L12:	sspush 27264;
+					invokestatic 15;		// javacard/framework/ISOException.throwIt(S)V
+				L13:	sconst_0;
+					sstore 6;
+				L14:	sload 4;
+					sconst_2;
+					sadd;
+					s2b;
+					sstore 7;
+				L15:	goto L20;
+				L16:	aload_2;
+					sload 6;
+					sload 7;
+					sadd;
+					s2b;
+					baload;
+					sspush 240;
+					sand;
+					s2b;
+					bspush 48;
+					if_scmpne L18;
+				L17:	aload_2;
+					sload 6;
+					sload 7;
+					sadd;
+					s2b;
+					baload;
+					bspush 15;
+					sand;
+					bspush 9;
+					if_scmple L19;
+				L18:	sspush 27264;
+					invokestatic 15;		// javacard/framework/ISOException.throwIt(S)V
+					goto L21;
+				L19:	sload 6;
+					sconst_1;
+					sadd;
+					s2b;
+					sstore 6;
+				L20:	sload 6;
+					sload 5;
+					if_scmplt L16;
+				L21:	invokestatic 22;		// javacard/framework/JCSystem.beginTransaction()V
+					getfield_a_this 1;		// reference com/javacard/fido/FidoApplet.ownerPIN
+					aload_2;
+					sload 7;
+					sload 5;
+					invokevirtual 23;		// update([BSB)V
+					bspush 51;
+					putfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
+					invokestatic 24;		// javacard/framework/JCSystem.commitTransaction()V
+					return;
 		}
 
 		.method public select()Z 6 {
