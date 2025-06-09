@@ -137,13 +137,65 @@ class FidoApplet extends Applet {
 	}
 
 	private void registerProcessing(APDU apdu) {
-		// TODO Auto-generated method stub
+		if(!ownerPIN.isValidated())
+		{
+			ISOException.throwIt(ISO7816.SW_FUNC_NOT_SUPPORTED);
+		}
 		
 	}
 
 	private void verifyProcessing(APDU apdu) {
-		// TODO Auto-generated method stub
 		
+		byte[] apduBuffer = apdu.getBuffer();
+		
+		byte cla = apduBuffer[ISO7816.OFFSET_CLA];
+		
+		if(cla!=CLA_PROPRIETARY)
+		{
+			ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
+		}
+		
+		//Validate the PIN format.
+		if(apduBuffer[ISO7816.OFFSET_LC] < (byte)0x06
+				||apduBuffer[ISO7816.OFFSET_LC] > (byte)0x0E)
+		{
+			ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+		}
+		
+		byte dataStartOffset = ISO7816.OFFSET_CDATA;
+		
+		byte pinLength = apduBuffer[(short)(dataStartOffset+1)];
+		
+		if(apduBuffer[dataStartOffset] != (byte)0x01
+				||pinLength < (byte)0x04
+				||pinLength > (byte)0x0C)
+		{
+			ISOException.throwIt(ISO7816.SW_WRONG_DATA);
+		}
+		
+		byte iter = 0;
+		byte pinOffset = (byte) (dataStartOffset+2);
+		while(iter<pinLength)
+		{
+			if((byte)(apduBuffer[(byte)(iter+pinOffset)]&0xF0) != (byte)0x30
+					||(byte)(apduBuffer[(byte)(iter+pinOffset)]&0x0F) > (byte)0x09)
+			{
+				ISOException.throwIt(ISO7816.SW_WRONG_DATA);
+				break;
+			}
+			iter++;
+		}
+		
+		if(ownerPIN.getTriesRemaining() <= (byte)0x00)
+		{
+			ISOException.throwIt(ISO7816.SW_AUTHENTICATION_METHOD_BLOCKED);
+		}
+		
+		boolean validatedPin = ownerPIN.check(apduBuffer, pinOffset, pinLength);
+		if(validatedPin == false)
+		{
+			ISOException.throwIt(ISO7816.SW_DATA_INVALID);
+		}
 	}
 
 	private void storePinProcessing(APDU apdu) {
