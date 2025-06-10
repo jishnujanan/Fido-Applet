@@ -6,6 +6,11 @@
 package com.javacard.fido;
 
 import javacard.framework.*;
+import javacard.security.ECPublicKey;
+import javacard.security.KeyBuilder;
+import javacard.security.KeyPair;
+import javacard.security.PrivateKey;
+import javacard.security.RandomData;
 
 /**
  * Applet class
@@ -38,6 +43,17 @@ class FidoApplet extends Applet {
 	private OwnerPIN ownerPIN 					= null;
 	private static final byte PIN_TRY_LIMIT		= (byte) 0x0F;
 	private static final byte MAX_PIN_SIZE		= (byte) 0x0F;
+	
+	private byte[] credentialId					= null;
+	private static short sizeOfcredentialId		= (short)4*100;
+	private byte credentialIdReferenceTop		= (byte)0;
+	private byte[] transientArrayForComputation	= null;
+	private static byte SIZEOF_CRED				= (byte)4;
+	private static byte INDEX_CRED_REF_TOP		= (byte)0;
+	private static byte INDEX_GEN_CRED			= (byte)1;
+	private static RandomData randomData		= null;
+	private static KeyPair keyPair				= null;
+	private PrivateKey[] privateKeys 			= null;
 	/**
 	 * Installs this applet.
 	 * 
@@ -55,6 +71,16 @@ class FidoApplet extends Applet {
 	protected FidoApplet(byte[] bArray, short bOffset, byte bLength) {
 		
 		ownerPIN = new OwnerPIN(PIN_TRY_LIMIT, MAX_PIN_SIZE);
+		
+		credentialId = new byte[sizeOfcredentialId];
+		
+		randomData = RandomData.getInstance(RandomData.ALG_TRNG);
+		
+		transientArrayForComputation = JCSystem.makeTransientByteArray((short)(SIZEOF_CRED+1), JCSystem.CLEAR_ON_RESET);
+		
+		keyPair = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_256);
+		
+		privateKeys = new PrivateKey[(short)(sizeOfcredentialId>>2)];
 		
 		register(bArray, ((short) (bOffset + 1)), bArray[bOffset]);
 	}
@@ -142,6 +168,68 @@ class FidoApplet extends Applet {
 			ISOException.throwIt(ISO7816.SW_FUNC_NOT_SUPPORTED);
 		}
 		
+		byte[] apduBuffer = apdu.getBuffer();
+		transientArrayForComputation[INDEX_CRED_REF_TOP] = credentialIdReferenceTop;
+		byte cla = apduBuffer[ISO7816.OFFSET_CLA];
+		
+		if(cla!=CLA_PROPRIETARY)
+		{
+			ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
+		}
+		
+		if(transientArrayForComputation[INDEX_CRED_REF_TOP] == (byte)(sizeOfcredentialId/4))
+		{
+			ISOException.throwIt(ISO7816.SW_FILE_FULL);
+		}
+		
+		//Generate a credential ID [4 bytes]
+		randomData.generateData(transientArrayForComputation, INDEX_GEN_CRED, SIZEOF_CRED);
+		//Check the credential ID generated is duplicate or not.
+		short iter = (short)0;
+		while(iter<(short)(credentialIdReferenceTop*4))
+		{
+			if(Util.arrayCompare(transientArrayForComputation, INDEX_GEN_CRED, credentialId, iter, SIZEOF_CRED) == 0)
+			{
+				randomData.generateData(transientArrayForComputation, INDEX_GEN_CRED, SIZEOF_CRED);
+				iter=0;
+			}
+			else
+			{
+				iter+=4;
+			}
+		}
+
+		JCSystem.beginTransaction();
+		
+		//Credential is copied to persistent array
+		Util.arrayCopy(transientArrayForComputation, INDEX_GEN_CRED, credentialId, credentialIdReferenceTop, SIZEOF_CRED);
+
+		//Generation of Key Pair
+		keyPair.genKeyPair();
+		
+		privateKeys[credentialIdReferenceTop] = keyPair.getPrivate();
+		
+		//Credential Reference Top is incremented by 1 to store the next credential ID
+		credentialIdReferenceTop++;
+
+		JCSystem.commitTransaction();
+		
+		//Send back the Public Key and Credential ID
+		short outData = (short)0;
+		Util.setShort(apduBuffer, outData, (short)0xD509);
+		outData+=(short)2;
+		apduBuffer[outData] = SIZEOF_CRED;
+		outData++;
+		Util.setShort(apduBuffer, outData, (short)0x3D5A);
+		outData+=(short)2;
+		apduBuffer[outData] = (byte)65;
+		outData++;
+		ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
+		publicKey.getW(apduBuffer, outData);
+		outData+=(short)65;
+		
+		apdu.setOutgoingLength(outData);
+		apdu.sendBytes((short)0, outData);
 	}
 
 	private void verifyProcessing(APDU apdu) {
