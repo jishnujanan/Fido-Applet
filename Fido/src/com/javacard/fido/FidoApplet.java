@@ -220,7 +220,7 @@ class FidoApplet extends Applet {
 				} else if(ins == INS_STORE_PIN){
 					storePinProcessing(apdu);
 				} else{
-					ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+					ISOException.throwIt(ISO7816.SW_FUNC_NOT_SUPPORTED);
 				}
 			} else if (CARD_STATE == STATE_ACTIVE) {
 				if(ins == INS_SELECT){
@@ -236,7 +236,7 @@ class FidoApplet extends Applet {
 			    } else if (ins == INS_DISABLE) {
 			        disableProcessing(apdu);
 			    } else {
-			        ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+			        ISOException.throwIt(ISO7816.SW_FUNC_NOT_SUPPORTED);
 			    }
 			} else if (CARD_STATE == STATE_UNWORKABLE) {
 				ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);

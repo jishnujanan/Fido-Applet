@@ -1,5 +1,5 @@
 // converted by version  [v25.0]
-// on Sun Jun 15 20:52:35 IST 2025
+// on Sun Jun 15 20:54:07 IST 2025
 
 .package com/javacard/fido {
 	.aid 0x6A:0x66:0x69:0x64:0x6F;
@@ -351,7 +351,7 @@
 					aload_1;
 					invokespecial 30;		// com/javacard/fido/FidoApplet.storePinProcessing(Ljavacard/framework/APDU;)V
 					goto_w L31;
-				L7:	sspush 27904;
+				L7:	sspush 27265;
 					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
 					goto_w L31;
 				L8:	getfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
@@ -399,7 +399,7 @@
 					aload_1;
 					invokespecial 36;		// com/javacard/fido/FidoApplet.disableProcessing(Ljavacard/framework/APDU;)V
 					goto L31;
-				L21:	sspush 27904;
+				L21:	sspush 27265;
 					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
 					goto L31;
 				L22:	getfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
