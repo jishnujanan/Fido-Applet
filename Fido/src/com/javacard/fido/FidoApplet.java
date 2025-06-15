@@ -9,6 +9,7 @@ import javacard.framework.*;
 import javacard.security.ECPublicKey;
 import javacard.security.KeyBuilder;
 import javacard.security.KeyPair;
+import javacard.security.MessageDigest;
 import javacard.security.PrivateKey;
 import javacard.security.RandomData;
 import javacard.security.Signature;
@@ -58,6 +59,8 @@ class FidoApplet extends Applet {
 
 	// Current card state variable (initialized to STATE_INACTIVE by default)
 	private byte CARD_STATE = STATE_INACTIVE;
+	
+	private byte DISABLE_CARD_SETUP_DONE = STATE_INACTIVE;
 
 
 	// Tag for Credential ID
@@ -126,6 +129,8 @@ class FidoApplet extends Applet {
 
 	// Random number generator for secure operations
 	private static RandomData randomData = null;
+	
+	private static MessageDigest messageDigest = null;
 
 	// KeyPair used for ECC key generation
 	private static KeyPair keyPair = null;
@@ -133,6 +138,8 @@ class FidoApplet extends Applet {
 	// Array of private keys for storing multiple credentials
 	private PrivateKey[] privateKeys = null;
 
+	private byte[] disableCardPin = null;
+	
 	private static Signature signature = null;
 	// APDU Case Definitions
 
@@ -186,6 +193,10 @@ class FidoApplet extends Applet {
 		privateKeys = new PrivateKey[(short)(sizeOfcredentialIdArray >> 2)];
 		
 		signature = Signature.getInstance(Signature.ALG_ECDSA_SHA_256, false);
+		
+		disableCardPin = new byte[MessageDigest.LENGTH_SHA];
+		
+		messageDigest = MessageDigest.getInstance(MessageDigest.ALG_SHA, false);
 		
 		register(bArray, ((short) (bOffset + 1)), bArray[bOffset]);
 	}
@@ -509,42 +520,87 @@ class FidoApplet extends Applet {
 			ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
 		}
 		
-		//Validate the PIN format.
-		if(apduBuffer[ISO7816.OFFSET_LC] < (byte)0x06
-				||apduBuffer[ISO7816.OFFSET_LC] > (byte)0x0E)
-		{
-			ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-		}
 		byte dataStartOffset = ISO7816.OFFSET_CDATA;
 		
-		byte pinLength = apduBuffer[(short)(dataStartOffset+1)];
-		
-		if(apduBuffer[dataStartOffset] != (byte)0x01
-				||pinLength < (byte)0x04
-				||pinLength > (byte)0x0C)
+		if(apduBuffer[dataStartOffset] == (byte)0x01)
+		{
+			//Validate the PIN format.
+			if(apduBuffer[ISO7816.OFFSET_LC] < (byte)0x06
+					||apduBuffer[ISO7816.OFFSET_LC] > (byte)0x0E)
+			{
+				ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+			}
+			
+			
+			byte pinLength = apduBuffer[(short)(dataStartOffset+1)];
+			
+			if(apduBuffer[dataStartOffset] != (byte)0x01
+					||pinLength < (byte)0x04
+					||pinLength > (byte)0x0C)
+			{
+				ISOException.throwIt(ISO7816.SW_WRONG_DATA);
+			}
+			
+			byte iter = 0;
+			byte pinOffset = (byte) (dataStartOffset+2);
+			while(iter<pinLength)
+			{
+				if((byte)(apduBuffer[(byte)(iter+pinOffset)]&0xF0) != (byte)0x30
+						||(byte)(apduBuffer[(byte)(iter+pinOffset)]&0x0F) > (byte)0x09)
+				{
+					ISOException.throwIt(ISO7816.SW_WRONG_DATA);
+					break;
+				}
+				iter++;
+			}
+			
+			JCSystem.beginTransaction();
+			
+			ownerPIN.update(apduBuffer, pinOffset, pinLength);
+			CARD_STATE = STATE_ACTIVE;
+			
+			JCSystem.commitTransaction();
+		}
+		else if(apduBuffer[dataStartOffset] == (byte)0x02)
+		{
+			if(DISABLE_CARD_SETUP_DONE == STATE_ACTIVE)
+			{
+				ISOException.throwIt(ISO7816.SW_FUNC_NOT_SUPPORTED);
+			}
+			
+			//Validate the PIN format.
+			if(apduBuffer[ISO7816.OFFSET_LC] != (byte)0x06)
+			{
+				ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+			}
+			
+			byte pinLength = (byte)0x04;
+			
+			byte iter = 0;
+			byte pinOffset = (byte) (dataStartOffset+2);
+			while(iter<pinLength)
+			{
+				if((byte)(apduBuffer[(byte)(iter+pinOffset)]&0xF0) != (byte)0x30
+						||(byte)(apduBuffer[(byte)(iter+pinOffset)]&0x0F) > (byte)0x09)
+				{
+					ISOException.throwIt(ISO7816.SW_WRONG_DATA);
+					break;
+				}
+				iter++;
+			}
+			JCSystem.beginTransaction();
+			
+			messageDigest.doFinal(apduBuffer, pinOffset, pinLength, disableCardPin, (short)0);
+			
+			DISABLE_CARD_SETUP_DONE = STATE_ACTIVE;
+			
+			JCSystem.commitTransaction();
+			
+		}
+		else
 		{
 			ISOException.throwIt(ISO7816.SW_WRONG_DATA);
 		}
-		
-		byte iter = 0;
-		byte pinOffset = (byte) (dataStartOffset+2);
-		while(iter<pinLength)
-		{
-			if((byte)(apduBuffer[(byte)(iter+pinOffset)]&0xF0) != (byte)0x30
-					||(byte)(apduBuffer[(byte)(iter+pinOffset)]&0x0F) > (byte)0x09)
-			{
-				ISOException.throwIt(ISO7816.SW_WRONG_DATA);
-				break;
-			}
-			iter++;
-		}
-		
-		JCSystem.beginTransaction();
-		
-		ownerPIN.update(apduBuffer, pinOffset, pinLength);
-		CARD_STATE = STATE_ACTIVE;
-		
-		JCSystem.commitTransaction();
 	}
 
 	private void receiveAndSend(APDU apdu,byte commandCase)
