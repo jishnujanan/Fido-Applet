@@ -40,13 +40,6 @@ class FidoApplet extends Applet {
 
 	// INS for logging in an existing user
 	private static final byte INS_LOGIN = (byte) 0x23;
-
-	// INS for changing an existing user's PIN
-	private static final byte INS_CHANGE_PIN = (byte) 0x24;
-
-	// INS for disabling a user or feature
-	private static final byte INS_DISABLE = (byte) 0x25;
-
 	// Card State Definitions
 	// Card state: inactive or uninitialized
 	private static final byte STATE_INACTIVE = (byte) 0x22;
@@ -54,14 +47,8 @@ class FidoApplet extends Applet {
 	// Card state: active and operational
 	private static final byte STATE_ACTIVE = (byte) 0x33;
 
-	// Card state: error or blocked, no operations allowed
-	private static final byte STATE_UNWORKABLE = (byte) 0x44;
-
 	// Current card state variable (initialized to STATE_INACTIVE by default)
 	private byte CARD_STATE = STATE_INACTIVE;
-	
-	private byte DISABLE_CARD_SETUP_DONE = STATE_INACTIVE;
-
 
 	// Tag for Credential ID
 	private static final short TAG_CREDENTIAL_ID 		= (short)0x4349;
@@ -96,6 +83,12 @@ class FidoApplet extends Applet {
 	// Size of Challenge (random nonce used for anti-replay) 'CH'
 	private static final byte SIZEOF_CHALLENGE 			= (byte)0x08; 
 	
+	private static final short TAG_USER_PIN					= (short)0x9F2D ;
+	
+	private static final byte MAX_PIN_SIZE				= (byte)0x0C ;
+	
+	private static final byte MIN_PIN_SIZE				= (byte)0x04 ;
+	
 	// PIN and Credential Handling
 
 	// OwnerPIN object for managing user PIN
@@ -103,9 +96,6 @@ class FidoApplet extends Applet {
 
 	// Maximum number of allowed PIN attempts
 	private static final byte PIN_TRY_LIMIT = (byte) 0x0F;
-
-	// Maximum allowed PIN size
-	private static final byte MAX_PIN_SIZE = (byte) 0x0F;
 
 	// Stores all credential IDs
 	private byte[] credentialId = null;
@@ -129,16 +119,12 @@ class FidoApplet extends Applet {
 
 	// Random number generator for secure operations
 	private static RandomData randomData = null;
-	
-	private static MessageDigest messageDigest = null;
 
 	// KeyPair used for ECC key generation
 	private static KeyPair keyPair = null;
 
 	// Array of private keys for storing multiple credentials
 	private PrivateKey[] privateKeys = null;
-
-	private byte[] disableCardPin = null;
 	
 	private static Signature signature = null;
 	// APDU Case Definitions
@@ -194,10 +180,6 @@ class FidoApplet extends Applet {
 		
 		signature = Signature.getInstance(Signature.ALG_ECDSA_SHA_256, false);
 		
-		disableCardPin = new byte[MessageDigest.LENGTH_SHA];
-		
-		messageDigest = MessageDigest.getInstance(MessageDigest.ALG_SHA, false);
-		
 		register(bArray, ((short) (bOffset + 1)), bArray[bOffset]);
 	}
 
@@ -231,15 +213,9 @@ class FidoApplet extends Applet {
 			        registerProcessing(apdu);
 			    } else if (ins == INS_LOGIN) {
 			        loginProcessing(apdu);
-			    } else if (ins == INS_CHANGE_PIN) {
-			        changePinProcessing(apdu);
-			    } else if (ins == INS_DISABLE) {
-			        disableProcessing(apdu);
 			    } else {
 			        ISOException.throwIt(ISO7816.SW_FUNC_NOT_SUPPORTED);
 			    }
-			} else if (CARD_STATE == STATE_UNWORKABLE) {
-				ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
 			} else {
 				ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
 			}
@@ -252,16 +228,6 @@ class FidoApplet extends Applet {
 			ISOException.throwIt((short)0x6800);
 		}
 
-	}
-
-	private void disableProcessing(APDU apdu) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void changePinProcessing(APDU apdu) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private void loginProcessing(APDU apdu) {
@@ -322,13 +288,19 @@ class FidoApplet extends Applet {
 		//Find the corresponding key index.
 		short privateKeyOffset = (short)0;
 		short totalCredentialIdSize = (short) (credentialIdReferenceTop*4);
+		boolean credentialExists = false;
 		while(privateKeyOffset<totalCredentialIdSize)
 		{
 			if(Util.arrayCompare(apduBuffer, credentialIdOffset, credentialId, privateKeyOffset, SIZEOF_CREDENTIAL_ID) == (byte)0)
 			{
+				credentialExists = true;
 				break;
 			}
 			privateKeyOffset+=SIZEOF_CREDENTIAL_ID;
+		}
+		if(!credentialExists)
+		{
+			ISOException.throwIt(ISO7816.SW_WRONG_DATA);
 		}
 		privateKeyOffset = (short)(privateKeyOffset/4);
 		
@@ -464,43 +436,18 @@ class FidoApplet extends Applet {
 			ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
 		}
 		
-		//Validate the PIN format.
-		if(apduBuffer[ISO7816.OFFSET_LC] < (byte)0x06
-				||apduBuffer[ISO7816.OFFSET_LC] > (byte)0x0E)
-		{
-			ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-		}
-		
-		byte dataStartOffset = ISO7816.OFFSET_CDATA;
-		
-		byte pinLength = apduBuffer[(short)(dataStartOffset+1)];
-		
-		if(apduBuffer[dataStartOffset] != (byte)0x01
-				||pinLength < (byte)0x04
-				||pinLength > (byte)0x0C)
-		{
-			ISOException.throwIt(ISO7816.SW_WRONG_DATA);
-		}
-		
-		byte iter = 0;
-		byte pinOffset = (byte) (dataStartOffset+2);
-		while(iter<pinLength)
-		{
-			if((byte)(apduBuffer[(byte)(iter+pinOffset)]&0xF0) != (byte)0x30
-					||(byte)(apduBuffer[(byte)(iter+pinOffset)]&0x0F) > (byte)0x09)
-			{
-				ISOException.throwIt(ISO7816.SW_WRONG_DATA);
-				break;
-			}
-			iter++;
-		}
+		validatePin(apdu);
 		
 		if(ownerPIN.getTriesRemaining() <= (byte)0x00)
 		{
 			ISOException.throwIt(ISO7816.SW_AUTHENTICATION_METHOD_BLOCKED);
 		}
 		
+		byte pinLength = ISO7816.OFFSET_EXT_CDATA;
+		byte pinOffset = (byte)(pinLength+1);
+		
 		boolean validatedPin = ownerPIN.check(apduBuffer, pinOffset, pinLength);
+		
 		if(validatedPin == false)
 		{
 			ISOException.throwIt(ISO7816.SW_DATA_INVALID);
@@ -520,39 +467,19 @@ class FidoApplet extends Applet {
 			ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
 		}
 		
-		byte dataStartOffset = ISO7816.OFFSET_CDATA;
+
+		short tagReceived = Util.getShort(apduBuffer, ISO7816.OFFSET_CDATA);
 		
-		if(apduBuffer[dataStartOffset] == (byte)0x01)
+		if(tagReceived != TAG_USER_PIN)
 		{
-			//Validate the PIN format.
-			if(apduBuffer[ISO7816.OFFSET_LC] < (byte)0x06
-					||apduBuffer[ISO7816.OFFSET_LC] > (byte)0x0E)
-			{
-				ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-			}
+			ISOException.throwIt(ISO7816.SW_WRONG_DATA);
+		}
+		else 
+		{
+			validatePin(apdu);
 			
-			
-			byte pinLength = apduBuffer[(short)(dataStartOffset+1)];
-			
-			if(apduBuffer[dataStartOffset] != (byte)0x01
-					||pinLength < (byte)0x04
-					||pinLength > (byte)0x0C)
-			{
-				ISOException.throwIt(ISO7816.SW_WRONG_DATA);
-			}
-			
-			byte iter = 0;
-			byte pinOffset = (byte) (dataStartOffset+2);
-			while(iter<pinLength)
-			{
-				if((byte)(apduBuffer[(byte)(iter+pinOffset)]&0xF0) != (byte)0x30
-						||(byte)(apduBuffer[(byte)(iter+pinOffset)]&0x0F) > (byte)0x09)
-				{
-					ISOException.throwIt(ISO7816.SW_WRONG_DATA);
-					break;
-				}
-				iter++;
-			}
+			byte pinLength = ISO7816.OFFSET_EXT_CDATA;
+			byte pinOffset = (byte)(pinLength+1);
 			
 			JCSystem.beginTransaction();
 			
@@ -560,46 +487,6 @@ class FidoApplet extends Applet {
 			CARD_STATE = STATE_ACTIVE;
 			
 			JCSystem.commitTransaction();
-		}
-		else if(apduBuffer[dataStartOffset] == (byte)0x02)
-		{
-			if(DISABLE_CARD_SETUP_DONE == STATE_ACTIVE)
-			{
-				ISOException.throwIt(ISO7816.SW_FUNC_NOT_SUPPORTED);
-			}
-			
-			//Validate the PIN format.
-			if(apduBuffer[ISO7816.OFFSET_LC] != (byte)0x06)
-			{
-				ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-			}
-			
-			byte pinLength = (byte)0x04;
-			
-			byte iter = 0;
-			byte pinOffset = (byte) (dataStartOffset+2);
-			while(iter<pinLength)
-			{
-				if((byte)(apduBuffer[(byte)(iter+pinOffset)]&0xF0) != (byte)0x30
-						||(byte)(apduBuffer[(byte)(iter+pinOffset)]&0x0F) > (byte)0x09)
-				{
-					ISOException.throwIt(ISO7816.SW_WRONG_DATA);
-					break;
-				}
-				iter++;
-			}
-			JCSystem.beginTransaction();
-			
-			messageDigest.doFinal(apduBuffer, pinOffset, pinLength, disableCardPin, (short)0);
-			
-			DISABLE_CARD_SETUP_DONE = STATE_ACTIVE;
-			
-			JCSystem.commitTransaction();
-			
-		}
-		else
-		{
-			ISOException.throwIt(ISO7816.SW_WRONG_DATA);
 		}
 	}
 
@@ -654,4 +541,49 @@ class FidoApplet extends Applet {
 		return true;
 	}
 	
+	private boolean validatePin(APDU apdu)
+	{
+		byte[] apduBuffer = apdu.getBuffer();
+		
+		//Data start will be pointing to the starting offset of PIN Tag.
+		byte dataStartOffset = ISO7816.OFFSET_CDATA;
+
+		//Maximum PIN Size + 2 byte Tag + 1 byte Length
+		byte maxLengthOfCommand = MAX_PIN_SIZE+(byte)2+(byte)1;
+		
+		//Minimum PIN Size + 2 byte Tag + 1 byte Length
+		byte minLengthOfCommand = MIN_PIN_SIZE+(byte)2+(byte)1;
+		
+		byte pinLength = apduBuffer[(short)(dataStartOffset+2)];
+		
+		
+		//Validate the PIN format.
+		if(apduBuffer[ISO7816.OFFSET_LC] < minLengthOfCommand
+				||apduBuffer[ISO7816.OFFSET_LC] > maxLengthOfCommand)
+		{
+			ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+		}
+		
+		
+		if(pinLength < MIN_PIN_SIZE
+				||pinLength > MAX_PIN_SIZE)
+		{
+			ISOException.throwIt(ISO7816.SW_WRONG_DATA);
+		}
+		
+		byte iter = 0;
+		byte pinOffset = (byte) (dataStartOffset+3);
+		while(iter<pinLength)
+		{
+			if((byte)(apduBuffer[(byte)(iter+pinOffset)]&0xF0) != (byte)0x30
+					||(byte)(apduBuffer[(byte)(iter+pinOffset)]&0x0F) > (byte)0x09)
+			{
+				ISOException.throwIt(ISO7816.SW_WRONG_DATA);
+				break;
+			}
+			iter++;
+		}
+		
+		return true;
+	}
 }

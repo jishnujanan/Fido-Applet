@@ -1,5 +1,5 @@
 // converted by version  [v25.0]
-// on Sun Jun 15 20:54:07 IST 2025
+// on Sat Jun 21 10:20:46 IST 2025
 
 .package com/javacard/fido {
 	.aid 0x6A:0x66:0x69:0x64:0x6F;
@@ -19,154 +19,138 @@
 		// 0
 		instanceFieldRef byte FidoApplet/CARD_STATE;
 		// 1
-		instanceFieldRef byte FidoApplet/DISABLE_CARD_SETUP_DONE;
-		// 2
 		instanceFieldRef 0.9 FidoApplet/ownerPIN;
-		// 3
+		// 2
 		instanceFieldRef byte[] FidoApplet/credentialId;
-		// 4
+		// 3
 		instanceFieldRef byte FidoApplet/credentialIdReferenceTop;
-		// 5
+		// 4
 		instanceFieldRef byte[] FidoApplet/transientArrayForComputation;
-		// 6
+		// 5
 		instanceFieldRef 1.2[] FidoApplet/privateKeys;
+		// 6
+		staticMethodRef FidoApplet/<init>([BSB)V;
 		// 7
-		instanceFieldRef byte[] FidoApplet/disableCardPin;
+		.classRef FidoApplet;
 		// 8
 		staticMethodRef 0.3.0()V;		// javacard/framework/Applet.<init>()V
 		// 9
-		staticMethodRef FidoApplet/<init>([BSB)V;
-		// 10
-		.classRef FidoApplet;
-		// 11
 		.classRef 0.9;		// javacard/framework/OwnerPIN
-		// 12
+		// 10
 		staticMethodRef 0.9.0(BB)V;		// javacard/framework/OwnerPIN.<init>(BB)V
-		// 13
+		// 11
 		staticFieldRef short FidoApplet/sizeOfcredentialIdArray;
-		// 14
+		// 12
 		staticMethodRef 1.14.0(B)Ljavacard/security/RandomData;;		// javacard/security/RandomData.getInstance(B)Ljavacard/security/RandomData;
 			.descriptor	Ljavacard/security/RandomData;	1.14;
 
-		// 15
+		// 13
 		staticFieldRef 1.14 FidoApplet/randomData;
-		// 16
+		// 14
 		staticMethodRef 0.8.13(SB)[B;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
-		// 17
+		// 15
 		.classRef 1.16;		// javacard/security/KeyPair
-		// 18
+		// 16
 		staticMethodRef 1.16.0(BS)V;		// javacard/security/KeyPair.<init>(BS)V
-		// 19
+		// 17
 		staticFieldRef 1.16 FidoApplet/keyPair;
-		// 20
+		// 18
 		.classRef 1.2;		// javacard/security/PrivateKey
-		// 21
+		// 19
 		staticMethodRef 1.15.0(BZ)Ljavacard/security/Signature;;		// javacard/security/Signature.getInstance(BZ)Ljavacard/security/Signature;
 			.descriptor	Ljavacard/security/Signature;	1.15;
 
-		// 22
+		// 20
 		staticFieldRef 1.15 FidoApplet/signature;
-		// 23
-		staticMethodRef 1.11.0(BZ)Ljavacard/security/MessageDigest;;		// javacard/security/MessageDigest.getInstance(BZ)Ljavacard/security/MessageDigest;
-			.descriptor	Ljavacard/security/MessageDigest;	1.11;
-
-		// 24
-		staticFieldRef 1.11 FidoApplet/messageDigest;
-		// 25
+		// 21
 		virtualMethodRef 0.3.2([BSB)V;		// register([BSB)V
-		// 26
+		// 22
 		.classRef 0.7;		// javacard/framework/ISOException
-		// 27
+		// 23
 		.classRef 2.2;		// java/lang/Exception
-		// 28
+		// 24
 		virtualMethodRef 0.10.1()[B;		// getBuffer()[B
-		// 29
+		// 25
 		virtualMethodRef FidoApplet/select()Z;
-		// 30
+		// 26
 		staticMethodRef FidoApplet/storePinProcessing(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-		// 31
+		// 27
 		staticMethodRef 0.7.1(S)V;		// javacard/framework/ISOException.throwIt(S)V
-		// 32
+		// 28
 		staticMethodRef FidoApplet/verifyProcessing(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-		// 33
+		// 29
 		staticMethodRef FidoApplet/registerProcessing(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-		// 34
+		// 30
 		staticMethodRef FidoApplet/loginProcessing(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-		// 35
-		staticMethodRef FidoApplet/changePinProcessing(Ljavacard/framework/APDU;)V;
-			.descriptor	Ljavacard/framework/APDU;	0.10;
-
-		// 36
-		staticMethodRef FidoApplet/disableProcessing(Ljavacard/framework/APDU;)V;
-			.descriptor	Ljavacard/framework/APDU;	0.10;
-
-		// 37
+		// 31
 		virtualMethodRef 0.7.1()S;		// getReason()S
-		// 38
+		// 32
 		staticMethodRef FidoApplet/receiveAndSend(Ljavacard/framework/APDU;B)V;
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
-		// 39
+		// 33
 		virtualMethodRef 0.9.4()Z;		// isValidated()Z
-		// 40
+		// 34
 		staticMethodRef 0.16.4([BS)S;		// javacard/framework/Util.getShort([BS)S
-		// 41
+		// 35
 		virtualMethodRef 1.15.3(Ljavacard/security/Key;B)V;		// init(Ljavacard/security/Key;B)V
 			.descriptor	Ljavacard/security/Key;	1.0;
 
-		// 42
+		// 36
 		virtualMethodRef 1.15.5([BSS[BS)S;		// sign([BSS[BS)S
-		// 43
+		// 37
 		staticMethodRef 0.16.6([BSS)S;		// javacard/framework/Util.setShort([BSS)S
-		// 44
+		// 38
 		staticMethodRef 0.16.2([BS[BSS)S;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
-		// 45
+		// 39
 		virtualMethodRef 0.10.9(S)V;		// setOutgoingLength(S)V
-		// 46
+		// 40
 		virtualMethodRef 0.10.4(SS)V;		// sendBytes(SS)V
-		// 47
+		// 41
 		staticMethodRef 0.16.0([BS[BSS)B;		// javacard/framework/Util.arrayCompare([BS[BSS)B
-		// 48
+		// 42
 		virtualMethodRef 1.14.3([BSS)S;		// nextBytes([BSS)S
-		// 49
+		// 43
 		staticMethodRef 0.8.1()V;		// javacard/framework/JCSystem.beginTransaction()V
-		// 50
+		// 44
 		staticMethodRef 0.16.1([BS[BSS)S;		// javacard/framework/Util.arrayCopy([BS[BSS)S
-		// 51
+		// 45
 		virtualMethodRef 1.16.1()V;		// genKeyPair()V
-		// 52
+		// 46
 		virtualMethodRef 1.16.2()Ljavacard/security/PrivateKey;;		// getPrivate()Ljavacard/security/PrivateKey;
 			.descriptor	Ljavacard/security/PrivateKey;	1.2;
 
-		// 53
+		// 47
 		staticMethodRef 0.8.2()V;		// javacard/framework/JCSystem.commitTransaction()V
-		// 54
+		// 48
 		virtualMethodRef 1.16.3()Ljavacard/security/PublicKey;;		// getPublic()Ljavacard/security/PublicKey;
 			.descriptor	Ljavacard/security/PublicKey;	1.3;
 
-		// 55
+		// 49
 		.classRef 1.19;		// javacard/security/ECPublicKey
-		// 56
+		// 50
+		staticMethodRef FidoApplet/validatePin(Ljavacard/framework/APDU;)Z;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 51
 		virtualMethodRef 0.9.2()B;		// getTriesRemaining()B
-		// 57
+		// 52
 		virtualMethodRef 0.9.1([BSB)Z;		// check([BSB)Z
-		// 58
+		// 53
 		virtualMethodRef 0.9.8([BSB)V;		// update([BSB)V
-		// 59
-		virtualMethodRef 1.11.1([BSS[BS)S;		// doFinal([BSS[BS)S
-		// 60
+		// 54
 		virtualMethodRef 0.10.7()S;		// setOutgoing()S
-		// 61
+		// 55
 		virtualMethodRef 0.10.6()S;		// setIncomingAndReceive()S
-		// 62
+		// 56
 		virtualMethodRef 0.10.3(S)S;		// receiveBytes(S)S
 	}
 
@@ -177,21 +161,16 @@
 			private byte[] credentialId 1;		// [B
 			private byte[] transientArrayForComputation 2;		// [B
 			private 1.2[] privateKeys 3;		// [Ljavacard/security/PrivateKey;
-			private byte[] disableCardPin 4;		// [B
-			private byte CARD_STATE 5;		// B
-			private byte DISABLE_CARD_SETUP_DONE 6;		// B
-			private byte credentialIdReferenceTop 7;		// B
+			private byte CARD_STATE 4;		// B
+			private byte credentialIdReferenceTop 5;		// B
 			private static final byte CLA_PROPRIETARY = -128;		// B
 			private static final byte INS_SELECT = -92;		// B
 			private static final byte INS_STORE_PIN = 32;		// B
 			private static final byte INS_VERIFY = 33;		// B
 			private static final byte INS_REGISTER = 34;		// B
 			private static final byte INS_LOGIN = 35;		// B
-			private static final byte INS_CHANGE_PIN = 36;		// B
-			private static final byte INS_DISABLE = 37;		// B
 			private static final byte STATE_INACTIVE = 34;		// B
 			private static final byte STATE_ACTIVE = 51;		// B
-			private static final byte STATE_UNWORKABLE = 68;		// B
 			private static final short TAG_CREDENTIAL_ID = 17225;		// S
 			private static final byte SIZEOF_CREDENTIAL_ID = 4;		// B
 			private static final short TAG_PUBLIC_KEY = 19289;		// S
@@ -203,13 +182,14 @@
 			private static final byte SIZEOF_SIGNATURE_ALGORITHM = 1;		// B
 			private static final short TAG_CHALLENGE = 17224;		// S
 			private static final byte SIZEOF_CHALLENGE = 8;		// B
+			private static final short TAG_USER_PIN = -24787;		// S
+			private static final byte MAX_PIN_SIZE = 12;		// B
+			private static final byte MIN_PIN_SIZE = 4;		// B
 			private static final byte PIN_TRY_LIMIT = 15;		// B
-			private static final byte MAX_PIN_SIZE = 15;		// B
 			private static short sizeOfcredentialIdArray = 400;		// S
 			private static final byte INDEX_GEN_CRED = 0;		// B
 			private static final byte INDEX_SIGNATURE = 4;		// B
 			private static 1.14 randomData;		// Ljavacard/security/RandomData;
-			private static 1.11 messageDigest;		// Ljavacard/security/MessageDigest;
 			private static 1.16 keyPair;		// Ljavacard/security/KeyPair;
 			private static 1.15 signature;		// Ljavacard/security/Signature;
 			private static final byte CASE1 = 1;		// B
@@ -236,11 +216,11 @@
 			.stack 4;
 			.locals 0;
 
-				L0:	new 10;		// com/javacard/fido/FidoApplet
+				L0:	new 7;		// com/javacard/fido/FidoApplet
 					aload_0;
 					sload_1;
 					sload_2;
-					invokespecial 9;		// com/javacard/fido/FidoApplet.<init>([BSB)V
+					invokespecial 6;		// com/javacard/fido/FidoApplet.<init>([BSB)V
 					return;
 		}
 
@@ -252,63 +232,51 @@
 					invokespecial 8;		// javacard/framework/Applet.<init>()V
 					bspush 34;
 					putfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
-					bspush 34;
-					putfield_b_this 1;		// byte com/javacard/fido/FidoApplet.DISABLE_CARD_SETUP_DONE
 					aconst_null;
-					putfield_a_this 2;		// reference com/javacard/fido/FidoApplet.ownerPIN
+					putfield_a_this 1;		// reference com/javacard/fido/FidoApplet.ownerPIN
 					aconst_null;
-					putfield_a_this 3;		// reference com/javacard/fido/FidoApplet.credentialId
+					putfield_a_this 2;		// reference com/javacard/fido/FidoApplet.credentialId
 					sconst_0;
-					putfield_b_this 4;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
+					putfield_b_this 3;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
 					aconst_null;
-					putfield_a_this 5;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
+					putfield_a_this 4;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
 					aconst_null;
-					putfield_a_this 6;		// reference com/javacard/fido/FidoApplet.privateKeys
-					aconst_null;
-					putfield_a_this 7;		// reference com/javacard/fido/FidoApplet.disableCardPin
+					putfield_a_this 5;		// reference com/javacard/fido/FidoApplet.privateKeys
 					aload_0;
-					new 11;		// javacard/framework/OwnerPIN
+					new 9;		// javacard/framework/OwnerPIN
 					dup;
 					bspush 15;
-					bspush 15;
-					invokespecial 12;		// javacard/framework/OwnerPIN.<init>(BB)V
-					putfield_a 2;		// reference com/javacard/fido/FidoApplet.ownerPIN
+					bspush 12;
+					invokespecial 10;		// javacard/framework/OwnerPIN.<init>(BB)V
+					putfield_a 1;		// reference com/javacard/fido/FidoApplet.ownerPIN
 					aload_0;
-					getstatic_s 13;		// short com/javacard/fido/FidoApplet.sizeOfcredentialIdArray
+					getstatic_s 11;		// short com/javacard/fido/FidoApplet.sizeOfcredentialIdArray
 					newarray 11;
-					putfield_a 3;		// reference com/javacard/fido/FidoApplet.credentialId
+					putfield_a 2;		// reference com/javacard/fido/FidoApplet.credentialId
 					sconst_3;
-					invokestatic 14;		// javacard/security/RandomData.getInstance(B)Ljavacard/security/RandomData;
-					putstatic_a 15;		// reference com/javacard/fido/FidoApplet.randomData
+					invokestatic 12;		// javacard/security/RandomData.getInstance(B)Ljavacard/security/RandomData;
+					putstatic_a 13;		// reference com/javacard/fido/FidoApplet.randomData
 					aload_0;
 					bspush 100;
 					sconst_1;
-					invokestatic 16;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
-					putfield_a 5;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
-					new 17;		// javacard/security/KeyPair
+					invokestatic 14;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
+					putfield_a 4;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
+					new 15;		// javacard/security/KeyPair
 					dup;
 					sconst_5;
 					sspush 256;
-					invokespecial 18;		// javacard/security/KeyPair.<init>(BS)V
-					putstatic_a 19;		// reference com/javacard/fido/FidoApplet.keyPair
+					invokespecial 16;		// javacard/security/KeyPair.<init>(BS)V
+					putstatic_a 17;		// reference com/javacard/fido/FidoApplet.keyPair
 					aload_0;
-					getstatic_s 13;		// short com/javacard/fido/FidoApplet.sizeOfcredentialIdArray
+					getstatic_s 11;		// short com/javacard/fido/FidoApplet.sizeOfcredentialIdArray
 					sconst_2;
 					sshr;
-					anewarray 20;		// javacard/security/PrivateKey
-					putfield_a 6;		// reference com/javacard/fido/FidoApplet.privateKeys
+					anewarray 18;		// javacard/security/PrivateKey
+					putfield_a 5;		// reference com/javacard/fido/FidoApplet.privateKeys
 					bspush 33;
 					sconst_0;
-					invokestatic 21;		// javacard/security/Signature.getInstance(BZ)Ljavacard/security/Signature;
-					putstatic_a 22;		// reference com/javacard/fido/FidoApplet.signature
-					aload_0;
-					bspush 20;
-					newarray 11;
-					putfield_a 7;		// reference com/javacard/fido/FidoApplet.disableCardPin
-					sconst_1;
-					sconst_0;
-					invokestatic 23;		// javacard/security/MessageDigest.getInstance(BZ)Ljavacard/security/MessageDigest;
-					putstatic_a 24;		// reference com/javacard/fido/FidoApplet.messageDigest
+					invokestatic 19;		// javacard/security/Signature.getInstance(BZ)Ljavacard/security/Signature;
+					putstatic_a 20;		// reference com/javacard/fido/FidoApplet.signature
 					aload_0;
 					aload_1;
 					sload_2;
@@ -317,7 +285,7 @@
 					aload_1;
 					sload_2;
 					baload;
-					invokevirtual 25;		// register([BSB)V
+					invokevirtual 21;		// register([BSB)V
 					return;
 		}
 
@@ -328,7 +296,7 @@
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
 				L0:	aload_1;
-					invokevirtual 28;		// getBuffer()[B
+					invokevirtual 24;		// getBuffer()[B
 					astore_2;
 				L1:	aload_2;
 					sconst_1;
@@ -341,127 +309,89 @@
 					bspush -92;
 					if_scmpne L5;
 				L4:	aload_0;
-					invokevirtual 29;		// select()Z
+					invokevirtual 25;		// select()Z
 					pop;
-					goto_w L31;
+					goto L25;
 				L5:	sload_3;
 					bspush 32;
 					if_scmpne L7;
 				L6:	aload_0;
 					aload_1;
-					invokespecial 30;		// com/javacard/fido/FidoApplet.storePinProcessing(Ljavacard/framework/APDU;)V
-					goto_w L31;
+					invokespecial 26;		// com/javacard/fido/FidoApplet.storePinProcessing(Ljavacard/framework/APDU;)V
+					goto L25;
 				L7:	sspush 27265;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-					goto_w L31;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+					goto L25;
 				L8:	getfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
 					bspush 51;
-					if_scmpne L22;
+					if_scmpne L18;
 				L9:	sload_3;
 					bspush -92;
 					if_scmpne L11;
 				L10:	aload_0;
-					invokevirtual 29;		// select()Z
+					invokevirtual 25;		// select()Z
 					pop;
-					goto L31;
+					goto L25;
 				L11:	sload_3;
 					bspush 33;
 					if_scmpne L13;
 				L12:	aload_0;
 					aload_1;
-					invokespecial 32;		// com/javacard/fido/FidoApplet.verifyProcessing(Ljavacard/framework/APDU;)V
-					goto L31;
+					invokespecial 28;		// com/javacard/fido/FidoApplet.verifyProcessing(Ljavacard/framework/APDU;)V
+					goto L25;
 				L13:	sload_3;
 					bspush 34;
 					if_scmpne L15;
 				L14:	aload_0;
 					aload_1;
-					invokespecial 33;		// com/javacard/fido/FidoApplet.registerProcessing(Ljavacard/framework/APDU;)V
-					goto L31;
+					invokespecial 29;		// com/javacard/fido/FidoApplet.registerProcessing(Ljavacard/framework/APDU;)V
+					goto L25;
 				L15:	sload_3;
 					bspush 35;
 					if_scmpne L17;
 				L16:	aload_0;
 					aload_1;
-					invokespecial 34;		// com/javacard/fido/FidoApplet.loginProcessing(Ljavacard/framework/APDU;)V
-					goto L31;
-				L17:	sload_3;
-					bspush 36;
-					if_scmpne L19;
-				L18:	aload_0;
-					aload_1;
-					invokespecial 35;		// com/javacard/fido/FidoApplet.changePinProcessing(Ljavacard/framework/APDU;)V
-					goto L31;
-				L19:	sload_3;
-					bspush 37;
-					if_scmpne L21;
-				L20:	aload_0;
-					aload_1;
-					invokespecial 36;		// com/javacard/fido/FidoApplet.disableProcessing(Ljavacard/framework/APDU;)V
-					goto L31;
-				L21:	sspush 27265;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-					goto L31;
-				L22:	getfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
-					bspush 68;
-					if_scmpne L24;
-				L23:	sspush 27014;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-					goto L31;
-				L24:	sspush 27014;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L25:	goto L31;
-				L26:	astore_2;
-				L27:	aload_2;
-					invokevirtual 37;		// getReason()S
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L28:	goto L31;
-				L29:	astore_2;
-				L30:	sspush 26624;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L31:	return;
+					invokespecial 30;		// com/javacard/fido/FidoApplet.loginProcessing(Ljavacard/framework/APDU;)V
+					goto L25;
+				L17:	sspush 27265;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+					goto L25;
+				L18:	sspush 27014;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L19:	goto L25;
+				L20:	astore_2;
+				L21:	aload_2;
+					invokevirtual 31;		// getReason()S
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L22:	goto L25;
+				L23:	astore_2;
+				L24:	sspush 26624;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L25:	return;
 			.exceptionTable {
 				// start_block end_block handler_block catch_type_index
-				L0 L25 L26 26;
-				L0 L25 L29 27;
+				L0 L19 L20 22;
+				L0 L19 L23 23;
 			}
-		}
-
-		.method private disableProcessing(Ljavacard/framework/APDU;)V {
-			.stack 0;
-			.locals 0;
-
-			.descriptor	Ljavacard/framework/APDU;	0.10;
-
-				L0:	return;
-		}
-
-		.method private changePinProcessing(Ljavacard/framework/APDU;)V {
-			.stack 0;
-			.locals 0;
-
-			.descriptor	Ljavacard/framework/APDU;	0.10;
-
-				L0:	return;
 		}
 
 		.method private loginProcessing(Ljavacard/framework/APDU;)V {
 			.stack 6;
-			.locals 9;
+			.locals 10;
 
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
 				L0:	aload_0;
 					aload_1;
 					sconst_4;
-					invokespecial 38;		// com/javacard/fido/FidoApplet.receiveAndSend(Ljavacard/framework/APDU;B)V
-					getfield_a_this 2;		// reference com/javacard/fido/FidoApplet.ownerPIN
-					invokevirtual 39;		// isValidated()Z
+					invokespecial 32;		// com/javacard/fido/FidoApplet.receiveAndSend(Ljavacard/framework/APDU;B)V
+					getfield_a_this 1;		// reference com/javacard/fido/FidoApplet.ownerPIN
+					invokevirtual 33;		// isValidated()Z
 					ifne L2;
 				L1:	sspush 27265;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 				L2:	aload_1;
-					invokevirtual 28;		// getBuffer()[B
+					invokevirtual 24;		// getBuffer()[B
 					astore_2;
 				L3:	sconst_5;
 					sstore_3;
@@ -471,7 +401,7 @@
 					sstore 5;
 				L6:	aload_2;
 					sload_3;
-					invokestatic 40;		// javacard/framework/Util.getShort([BS)S
+					invokestatic 34;		// javacard/framework/Util.getShort([BS)S
 					sspush 17225;
 					if_scmpne L14;
 				L7:	sinc 3 2;
@@ -486,7 +416,7 @@
 					sinc 3 4;
 					aload_2;
 					sload_3;
-					invokestatic 40;		// javacard/framework/Util.getShort([BS)S
+					invokestatic 34;		// javacard/framework/Util.getShort([BS)S
 					sspush 17224;
 					if_scmpne L12;
 				L9:	sinc 3 2;
@@ -500,117 +430,125 @@
 					sstore 5;
 					goto L15;
 				L11:	sspush 26368;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 					goto L15;
 				L12:	sspush 27264;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 					goto L15;
 				L13:	sspush 26368;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 					goto L15;
 				L14:	sspush 27264;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 				L15:	sconst_0;
 					sstore 6;
-				L16:	getfield_b_this 4;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
+				L16:	getfield_b_this 3;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
 					sconst_4;
 					smul;
 					sstore 7;
-				L17:	goto L21;
-				L18:	aload_2;
+				L17:	sconst_0;
+					sstore 8;
+				L18:	goto L22;
+				L19:	aload_2;
 					sload 4;
-					getfield_a_this 3;		// reference com/javacard/fido/FidoApplet.credentialId
+					getfield_a_this 2;		// reference com/javacard/fido/FidoApplet.credentialId
 					sload 6;
 					sconst_4;
-					invokestatic 47;		// javacard/framework/Util.arrayCompare([BS[BSS)B
-					ifne L20;
-				L19:	goto L22;
-				L20:	sinc 6 4;
-				L21:	sload 6;
-					sload 7;
-					if_scmplt L18;
+					invokestatic 41;		// javacard/framework/Util.arrayCompare([BS[BSS)B
+					ifne L21;
+				L20:	sconst_1;
+					sstore 8;
+					goto L23;
+				L21:	sinc 6 4;
 				L22:	sload 6;
+					sload 7;
+					if_scmplt L19;
+				L23:	sload 8;
+					ifne L25;
+				L24:	sspush 27264;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L25:	sload 6;
 					sconst_4;
 					sdiv;
 					sstore 6;
-					getfield_a_this 6;		// reference com/javacard/fido/FidoApplet.privateKeys
+					getfield_a_this 5;		// reference com/javacard/fido/FidoApplet.privateKeys
 					sload 6;
 					aaload;
-					astore 8;
-				L23:	getstatic_a 22;		// reference com/javacard/fido/FidoApplet.signature
-					aload 8;
+					astore 9;
+				L26:	getstatic_a 20;		// reference com/javacard/fido/FidoApplet.signature
+					aload 9;
 					sconst_1;
-					invokevirtual 41;		// init(Ljavacard/security/Key;B)V
-					getstatic_a 22;		// reference com/javacard/fido/FidoApplet.signature
+					invokevirtual 35;		// init(Ljavacard/security/Key;B)V
+					getstatic_a 20;		// reference com/javacard/fido/FidoApplet.signature
 					aload_2;
 					sload 5;
 					bspush 8;
-					getfield_a_this 5;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
+					getfield_a_this 4;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
 					sconst_4;
-					invokevirtual 42;		// sign([BSS[BS)S
-					sstore 9;
-				L24:	sconst_0;
+					invokevirtual 36;		// sign([BSS[BS)S
 					sstore 10;
-				L25:	aload_2;
-					sload 10;
+				L27:	sconst_0;
+					sstore 11;
+				L28:	aload_2;
+					sload 11;
 					sspush 17225;
-					invokestatic 43;		// javacard/framework/Util.setShort([BSS)S
+					invokestatic 37;		// javacard/framework/Util.setShort([BSS)S
 					pop;
-					sinc 10 2;
+					sinc 11 2;
 					aload_2;
-					sload 10;
+					sload 11;
 					sconst_4;
 					bastore;
-					sinc 10 1;
+					sinc 11 1;
 					aload_2;
 					sload 4;
 					aload_2;
-					sload 10;
+					sload 11;
 					sconst_4;
-					invokestatic 44;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
-					sstore 10;
+					invokestatic 38;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
+					sstore 11;
 					aload_2;
-					sload 10;
+					sload 11;
 					sspush 21319;
-					invokestatic 43;		// javacard/framework/Util.setShort([BSS)S
+					invokestatic 37;		// javacard/framework/Util.setShort([BSS)S
 					pop;
-					sinc 10 2;
+					sinc 11 2;
 					aload_2;
+					sload 11;
 					sload 10;
-					sload 9;
 					s2b;
 					bastore;
-					sinc 10 1;
-					getfield_a_this 5;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
+					sinc 11 1;
+					getfield_a_this 4;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
 					sconst_4;
 					aload_2;
+					sload 11;
 					sload 10;
-					sload 9;
-					invokestatic 44;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
-					sstore 10;
+					invokestatic 38;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
+					sstore 11;
 					aload_2;
-					sload 10;
+					sload 11;
 					sspush 21313;
-					invokestatic 43;		// javacard/framework/Util.setShort([BSS)S
+					invokestatic 37;		// javacard/framework/Util.setShort([BSS)S
 					pop;
-					sinc 10 2;
+					sinc 11 2;
 					aload_2;
-					sload 10;
+					sload 11;
 					sconst_1;
 					bastore;
-					sinc 10 1;
+					sinc 11 1;
 					aload_2;
-					sload 10;
+					sload 11;
 					bspush 33;
 					bastore;
-					sinc 10 1;
+					sinc 11 1;
 					aload_1;
-					sload 10;
-					invokevirtual 45;		// setOutgoingLength(S)V
+					sload 11;
+					invokevirtual 39;		// setOutgoingLength(S)V
 					aload_1;
 					sconst_0;
-					sload 10;
-					invokevirtual 46;		// sendBytes(SS)V
+					sload 11;
+					invokevirtual 40;		// sendBytes(SS)V
 					return;
 		}
 
@@ -623,16 +561,16 @@
 				L0:	aload_0;
 					aload_1;
 					sconst_2;
-					invokespecial 38;		// com/javacard/fido/FidoApplet.receiveAndSend(Ljavacard/framework/APDU;B)V
-					getfield_a_this 2;		// reference com/javacard/fido/FidoApplet.ownerPIN
-					invokevirtual 39;		// isValidated()Z
+					invokespecial 32;		// com/javacard/fido/FidoApplet.receiveAndSend(Ljavacard/framework/APDU;B)V
+					getfield_a_this 1;		// reference com/javacard/fido/FidoApplet.ownerPIN
+					invokevirtual 33;		// isValidated()Z
 					ifne L2;
 				L1:	sspush 27265;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 				L2:	aload_1;
-					invokevirtual 28;		// getBuffer()[B
+					invokevirtual 24;		// getBuffer()[B
 					astore_2;
-				L3:	getfield_b_this 4;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
+				L3:	getfield_b_this 3;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
 					sstore_3;
 				L4:	aload_2;
 					sconst_0;
@@ -642,75 +580,75 @@
 					bspush -128;
 					if_scmpeq L7;
 				L6:	sspush 28160;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 				L7:	sload_3;
-					getstatic_s 13;		// short com/javacard/fido/FidoApplet.sizeOfcredentialIdArray
+					getstatic_s 11;		// short com/javacard/fido/FidoApplet.sizeOfcredentialIdArray
 					sconst_4;
 					sdiv;
 					s2b;
 					if_scmpne L9;
 				L8:	sspush 27268;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L9:	getstatic_a 15;		// reference com/javacard/fido/FidoApplet.randomData
-					getfield_a_this 5;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L9:	getstatic_a 13;		// reference com/javacard/fido/FidoApplet.randomData
+					getfield_a_this 4;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
 					sconst_0;
 					sconst_4;
-					invokevirtual 48;		// nextBytes([BSS)S
+					invokevirtual 42;		// nextBytes([BSS)S
 					pop;
 					sconst_0;
 					sstore 5;
 				L10:	goto L14;
-				L11:	getfield_a_this 5;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
+				L11:	getfield_a_this 4;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
 					sconst_0;
-					getfield_a_this 3;		// reference com/javacard/fido/FidoApplet.credentialId
+					getfield_a_this 2;		// reference com/javacard/fido/FidoApplet.credentialId
 					sload 5;
 					sconst_4;
-					invokestatic 47;		// javacard/framework/Util.arrayCompare([BS[BSS)B
+					invokestatic 41;		// javacard/framework/Util.arrayCompare([BS[BSS)B
 					ifne L13;
-				L12:	getstatic_a 15;		// reference com/javacard/fido/FidoApplet.randomData
-					getfield_a_this 5;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
+				L12:	getstatic_a 13;		// reference com/javacard/fido/FidoApplet.randomData
+					getfield_a_this 4;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
 					sconst_0;
 					sconst_4;
-					invokevirtual 48;		// nextBytes([BSS)S
+					invokevirtual 42;		// nextBytes([BSS)S
 					pop;
 					sconst_0;
 					sstore 5;
 					goto L14;
 				L13:	sinc 5 4;
 				L14:	sload 5;
-					getfield_b_this 4;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
+					getfield_b_this 3;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
 					sconst_4;
 					smul;
 					if_scmplt L11;
-				L15:	invokestatic 49;		// javacard/framework/JCSystem.beginTransaction()V
-					getfield_a_this 5;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
+				L15:	invokestatic 43;		// javacard/framework/JCSystem.beginTransaction()V
+					getfield_a_this 4;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
 					sconst_0;
-					getfield_a_this 3;		// reference com/javacard/fido/FidoApplet.credentialId
-					getfield_b_this 4;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
+					getfield_a_this 2;		// reference com/javacard/fido/FidoApplet.credentialId
+					getfield_b_this 3;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
 					sconst_4;
-					invokestatic 50;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+					invokestatic 44;		// javacard/framework/Util.arrayCopy([BS[BSS)S
 					pop;
-					getstatic_a 19;		// reference com/javacard/fido/FidoApplet.keyPair
-					invokevirtual 51;		// genKeyPair()V
-					getfield_a_this 6;		// reference com/javacard/fido/FidoApplet.privateKeys
-					getfield_b_this 4;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
-					getstatic_a 19;		// reference com/javacard/fido/FidoApplet.keyPair
-					invokevirtual 52;		// getPrivate()Ljavacard/security/PrivateKey;
+					getstatic_a 17;		// reference com/javacard/fido/FidoApplet.keyPair
+					invokevirtual 45;		// genKeyPair()V
+					getfield_a_this 5;		// reference com/javacard/fido/FidoApplet.privateKeys
+					getfield_b_this 3;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
+					getstatic_a 17;		// reference com/javacard/fido/FidoApplet.keyPair
+					invokevirtual 46;		// getPrivate()Ljavacard/security/PrivateKey;
 					aastore;
 					aload_0;
 					dup;
-					getfield_b 4;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
+					getfield_b 3;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
 					sconst_1;
 					sadd;
 					s2b;
-					putfield_b 4;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
-					invokestatic 53;		// javacard/framework/JCSystem.commitTransaction()V
+					putfield_b 3;		// byte com/javacard/fido/FidoApplet.credentialIdReferenceTop
+					invokestatic 47;		// javacard/framework/JCSystem.commitTransaction()V
 					sconst_0;
 					sstore 6;
 				L16:	aload_2;
 					sload 6;
 					sspush 17225;
-					invokestatic 43;		// javacard/framework/Util.setShort([BSS)S
+					invokestatic 37;		// javacard/framework/Util.setShort([BSS)S
 					pop;
 					sinc 6 2;
 					aload_2;
@@ -718,18 +656,18 @@
 					sconst_4;
 					bastore;
 					sinc 6 1;
-					getfield_a_this 5;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
+					getfield_a_this 4;		// reference com/javacard/fido/FidoApplet.transientArrayForComputation
 					sconst_0;
 					aload_2;
 					sload 6;
 					sconst_4;
-					invokestatic 44;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
+					invokestatic 38;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
 					pop;
 					sinc 6 4;
 					aload_2;
 					sload 6;
 					sspush 19289;
-					invokestatic 43;		// javacard/framework/Util.setShort([BSS)S
+					invokestatic 37;		// javacard/framework/Util.setShort([BSS)S
 					pop;
 					sinc 6 2;
 					aload_2;
@@ -737,20 +675,20 @@
 					bspush 65;
 					bastore;
 					sinc 6 1;
-					getstatic_a 19;		// reference com/javacard/fido/FidoApplet.keyPair
-					invokevirtual 54;		// getPublic()Ljavacard/security/PublicKey;
-					checkcast 0 55;		// T_CLASSORINTERFACE javacard/security/ECPublicKey
+					getstatic_a 17;		// reference com/javacard/fido/FidoApplet.keyPair
+					invokevirtual 48;		// getPublic()Ljavacard/security/PublicKey;
+					checkcast 0 49;		// T_CLASSORINTERFACE javacard/security/ECPublicKey
 					astore 7;
 				L17:	aload 7;
 					aload_2;
 					sload 6;
-					invokeinterface 3 55 19;		// javacard/security/ECPublicKey
+					invokeinterface 3 49 19;		// javacard/security/ECPublicKey
 					pop;
 					sinc 6 65;
 					aload_2;
 					sload 6;
 					sspush -5104;
-					invokestatic 43;		// javacard/framework/Util.setShort([BSS)S
+					invokestatic 37;		// javacard/framework/Util.setShort([BSS)S
 					pop;
 					sinc 6 2;
 					aload_2;
@@ -765,26 +703,26 @@
 					sinc 6 1;
 					aload_1;
 					sload 6;
-					invokevirtual 45;		// setOutgoingLength(S)V
+					invokevirtual 39;		// setOutgoingLength(S)V
 					aload_1;
 					sconst_0;
 					sload 6;
-					invokevirtual 46;		// sendBytes(SS)V
+					invokevirtual 40;		// sendBytes(SS)V
 					return;
 		}
 
 		.method private verifyProcessing(Ljavacard/framework/APDU;)V {
 			.stack 4;
-			.locals 7;
+			.locals 5;
 
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
 				L0:	aload_0;
 					aload_1;
 					sconst_3;
-					invokespecial 38;		// com/javacard/fido/FidoApplet.receiveAndSend(Ljavacard/framework/APDU;B)V
+					invokespecial 32;		// com/javacard/fido/FidoApplet.receiveAndSend(Ljavacard/framework/APDU;B)V
 					aload_1;
-					invokevirtual 28;		// getBuffer()[B
+					invokevirtual 24;		// getBuffer()[B
 					astore_2;
 				L1:	aload_2;
 					sconst_0;
@@ -794,110 +732,48 @@
 					bspush -128;
 					if_scmpeq L4;
 				L3:	sspush 28160;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L4:	aload_2;
-					sconst_4;
-					baload;
-					bspush 6;
-					if_scmplt L6;
-				L5:	aload_2;
-					sconst_4;
-					baload;
-					bspush 14;
-					if_scmple L7;
-				L6:	sspush 26368;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L7:	sconst_5;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L4:	aload_0;
+					aload_1;
+					invokespecial 50;		// com/javacard/fido/FidoApplet.validatePin(Ljavacard/framework/APDU;)Z
+					pop;
+					getfield_a_this 1;		// reference com/javacard/fido/FidoApplet.ownerPIN
+					invokevirtual 51;		// getTriesRemaining()B
+					ifgt L6;
+				L5:	sspush 27011;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L6:	bspush 7;
 					sstore 4;
-				L8:	aload_2;
-					sload 4;
+				L7:	sload 4;
 					sconst_1;
 					sadd;
-					baload;
+					s2b;
 					sstore 5;
-				L9:	aload_2;
-					sload 4;
-					baload;
-					sconst_1;
-					if_scmpne L12;
-				L10:	sload 5;
-					sconst_4;
-					if_scmplt L12;
-				L11:	sload 5;
-					bspush 12;
-					if_scmple L13;
-				L12:	sspush 27264;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L13:	sconst_0;
-					sstore 6;
-				L14:	sload 4;
-					sconst_2;
-					sadd;
-					s2b;
-					sstore 7;
-				L15:	goto L20;
-				L16:	aload_2;
-					sload 6;
-					sload 7;
-					sadd;
-					s2b;
-					baload;
-					sspush 240;
-					sand;
-					s2b;
-					bspush 48;
-					if_scmpne L18;
-				L17:	aload_2;
-					sload 6;
-					sload 7;
-					sadd;
-					s2b;
-					baload;
-					bspush 15;
-					sand;
-					bspush 9;
-					if_scmple L19;
-				L18:	sspush 27264;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-					goto L21;
-				L19:	sload 6;
-					sconst_1;
-					sadd;
-					s2b;
-					sstore 6;
-				L20:	sload 6;
-					sload 5;
-					if_scmplt L16;
-				L21:	getfield_a_this 2;		// reference com/javacard/fido/FidoApplet.ownerPIN
-					invokevirtual 56;		// getTriesRemaining()B
-					ifgt L23;
-				L22:	sspush 27011;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L23:	getfield_a_this 2;		// reference com/javacard/fido/FidoApplet.ownerPIN
+				L8:	getfield_a_this 1;		// reference com/javacard/fido/FidoApplet.ownerPIN
 					aload_2;
-					sload 7;
 					sload 5;
-					invokevirtual 57;		// check([BSB)Z
-					sstore 8;
-				L24:	sload 8;
-					ifne L26;
-				L25:	sspush 27012;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L26:	return;
+					sload 4;
+					invokevirtual 52;		// check([BSB)Z
+					sstore 6;
+				L9:	sload 6;
+					ifne L11;
+				L10:	sspush 27012;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L11:	return;
 		}
 
 		.method private storePinProcessing(Ljavacard/framework/APDU;)V {
-			.stack 6;
-			.locals 6;
+			.stack 4;
+			.locals 5;
 
 			.descriptor	Ljavacard/framework/APDU;	0.10;
 
 				L0:	aload_0;
 					aload_1;
 					sconst_3;
-					invokespecial 38;		// com/javacard/fido/FidoApplet.receiveAndSend(Ljavacard/framework/APDU;B)V
+					invokespecial 32;		// com/javacard/fido/FidoApplet.receiveAndSend(Ljavacard/framework/APDU;B)V
 					aload_1;
-					invokevirtual 28;		// getBuffer()[B
+					invokevirtual 24;		// getBuffer()[B
 					astore_2;
 				L1:	aload_2;
 					sconst_0;
@@ -907,170 +783,38 @@
 					bspush -128;
 					if_scmpeq L4;
 				L3:	sspush 28160;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L4:	sconst_5;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L4:	aload_2;
+					sconst_5;
+					invokestatic 34;		// javacard/framework/Util.getShort([BS)S
 					sstore 4;
-				L5:	aload_2;
-					sload 4;
-					baload;
-					sconst_1;
-					if_scmpne_w L24;
-				L6:	aload_2;
-					sconst_4;
-					baload;
-					bspush 6;
-					if_scmplt L8;
-				L7:	aload_2;
-					sconst_4;
-					baload;
-					bspush 14;
-					if_scmple L9;
-				L8:	sspush 26368;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L9:	aload_2;
-					sload 4;
-					sconst_1;
-					sadd;
-					baload;
+				L5:	sload 4;
+					sspush -24787;
+					if_scmpeq L7;
+				L6:	sspush 27264;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+					goto L10;
+				L7:	aload_0;
+					aload_1;
+					invokespecial 50;		// com/javacard/fido/FidoApplet.validatePin(Ljavacard/framework/APDU;)Z
+					pop;
+					bspush 7;
 					sstore 5;
-				L10:	aload_2;
-					sload 4;
-					baload;
-					sconst_1;
-					if_scmpne L13;
-				L11:	sload 5;
-					sconst_4;
-					if_scmplt L13;
-				L12:	sload 5;
-					bspush 12;
-					if_scmple L14;
-				L13:	sspush 27264;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L14:	sconst_0;
-					sstore 6;
-				L15:	sload 4;
-					sconst_2;
-					sadd;
-					s2b;
-					sstore 7;
-				L16:	goto L21;
-				L17:	aload_2;
-					sload 6;
-					sload 7;
-					sadd;
-					s2b;
-					baload;
-					sspush 240;
-					sand;
-					s2b;
-					bspush 48;
-					if_scmpne L19;
-				L18:	aload_2;
-					sload 6;
-					sload 7;
-					sadd;
-					s2b;
-					baload;
-					bspush 15;
-					sand;
-					bspush 9;
-					if_scmple L20;
-				L19:	sspush 27264;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-					goto L22;
-				L20:	sload 6;
+				L8:	sload 5;
 					sconst_1;
 					sadd;
 					s2b;
 					sstore 6;
-				L21:	sload 6;
-					sload 5;
-					if_scmplt L17;
-				L22:	invokestatic 49;		// javacard/framework/JCSystem.beginTransaction()V
-					getfield_a_this 2;		// reference com/javacard/fido/FidoApplet.ownerPIN
+				L9:	invokestatic 43;		// javacard/framework/JCSystem.beginTransaction()V
+					getfield_a_this 1;		// reference com/javacard/fido/FidoApplet.ownerPIN
 					aload_2;
-					sload 7;
+					sload 6;
 					sload 5;
-					invokevirtual 58;		// update([BSB)V
+					invokevirtual 53;		// update([BSB)V
 					bspush 51;
 					putfield_b_this 0;		// byte com/javacard/fido/FidoApplet.CARD_STATE
-					invokestatic 53;		// javacard/framework/JCSystem.commitTransaction()V
-				L23:	goto_w L41;
-				L24:	aload_2;
-					sload 4;
-					baload;
-					sconst_2;
-					if_scmpne L40;
-				L25:	getfield_b_this 1;		// byte com/javacard/fido/FidoApplet.DISABLE_CARD_SETUP_DONE
-					bspush 51;
-					if_scmpne L27;
-				L26:	sspush 27265;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L27:	aload_2;
-					sconst_4;
-					baload;
-					bspush 6;
-					if_scmpeq L29;
-				L28:	sspush 26368;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L29:	sconst_4;
-					sstore 5;
-				L30:	sconst_0;
-					sstore 6;
-				L31:	sload 4;
-					sconst_2;
-					sadd;
-					s2b;
-					sstore 7;
-				L32:	goto L37;
-				L33:	aload_2;
-					sload 6;
-					sload 7;
-					sadd;
-					s2b;
-					baload;
-					sspush 240;
-					sand;
-					s2b;
-					bspush 48;
-					if_scmpne L35;
-				L34:	aload_2;
-					sload 6;
-					sload 7;
-					sadd;
-					s2b;
-					baload;
-					bspush 15;
-					sand;
-					bspush 9;
-					if_scmple L36;
-				L35:	sspush 27264;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-					goto L38;
-				L36:	sload 6;
-					sconst_1;
-					sadd;
-					s2b;
-					sstore 6;
-				L37:	sload 6;
-					sload 5;
-					if_scmplt L33;
-				L38:	invokestatic 49;		// javacard/framework/JCSystem.beginTransaction()V
-					getstatic_a 24;		// reference com/javacard/fido/FidoApplet.messageDigest
-					aload_2;
-					sload 7;
-					sload 5;
-					getfield_a_this 7;		// reference com/javacard/fido/FidoApplet.disableCardPin
-					sconst_0;
-					invokevirtual 59;		// doFinal([BSS[BS)S
-					pop;
-					bspush 51;
-					putfield_b_this 1;		// byte com/javacard/fido/FidoApplet.DISABLE_CARD_SETUP_DONE
-					invokestatic 53;		// javacard/framework/JCSystem.commitTransaction()V
-				L39:	goto L41;
-				L40:	sspush 27264;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
-				L41:	return;
+					invokestatic 47;		// javacard/framework/JCSystem.commitTransaction()V
+				L10:	return;
 		}
 
 		.method private receiveAndSend(Ljavacard/framework/APDU;B)V {
@@ -1082,15 +826,15 @@
 				L0:	sload_2;
 					stableswitch L16 2 4 L1 L4 L4;
 				L1:	aload_1;
-					invokevirtual 60;		// setOutgoing()S
+					invokevirtual 54;		// setOutgoing()S
 					sstore_3;
 				L2:	sload_3;
 					ifne L17;
 				L3:	sspush 26368;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 					goto L17;
 				L4:	aload_1;
-					invokevirtual 28;		// getBuffer()[B
+					invokevirtual 24;		// getBuffer()[B
 					astore 4;
 				L5:	aload 4;
 					sconst_4;
@@ -1099,7 +843,7 @@
 					sand;
 					sstore 5;
 				L6:	aload_1;
-					invokevirtual 61;		// setIncomingAndReceive()S
+					invokevirtual 55;		// setIncomingAndReceive()S
 					sstore 6;
 				L7:	sload 5;
 					ifle L9;
@@ -1111,29 +855,29 @@
 					sconst_5;
 					sload 6;
 					sadd;
-					invokevirtual 62;		// receiveBytes(S)S
+					invokevirtual 56;		// receiveBytes(S)S
 					sstore 6;
 				L9:	sload_2;
 					sconst_4;
 					if_scmpne L13;
 				L10:	aload_1;
-					invokevirtual 60;		// setOutgoing()S
+					invokevirtual 54;		// setOutgoing()S
 					sstore_3;
 				L11:	sload_3;
 					ifne L17;
 				L12:	sspush 26368;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 					goto L17;
 				L13:	aload_1;
-					invokevirtual 60;		// setOutgoing()S
+					invokevirtual 54;		// setOutgoing()S
 					sstore_3;
 				L14:	sload_3;
 					ifle L17;
 				L15:	sspush 26368;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 					goto L17;
 				L16:	sspush 26368;
-					invokestatic 31;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
 				L17:	return;
 		}
 
@@ -1142,6 +886,91 @@
 			.locals 0;
 
 				L0:	sconst_1;
+					sreturn;
+		}
+
+		.method private validatePin(Ljavacard/framework/APDU;)Z {
+			.stack 3;
+			.locals 7;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 24;		// getBuffer()[B
+					astore_2;
+				L1:	sconst_5;
+					sstore_3;
+				L2:	bspush 15;
+					sstore 4;
+				L3:	bspush 7;
+					sstore 5;
+				L4:	aload_2;
+					sload_3;
+					sconst_2;
+					sadd;
+					baload;
+					sstore 6;
+				L5:	aload_2;
+					sconst_4;
+					baload;
+					sload 5;
+					if_scmplt L7;
+				L6:	aload_2;
+					sconst_4;
+					baload;
+					sload 4;
+					if_scmple L8;
+				L7:	sspush 26368;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L8:	sload 6;
+					sconst_4;
+					if_scmplt L10;
+				L9:	sload 6;
+					bspush 12;
+					if_scmple L11;
+				L10:	sspush 27264;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+				L11:	sconst_0;
+					sstore 7;
+				L12:	sload_3;
+					sconst_3;
+					sadd;
+					s2b;
+					sstore 8;
+				L13:	goto L18;
+				L14:	aload_2;
+					sload 7;
+					sload 8;
+					sadd;
+					s2b;
+					baload;
+					sspush 240;
+					sand;
+					s2b;
+					bspush 48;
+					if_scmpne L16;
+				L15:	aload_2;
+					sload 7;
+					sload 8;
+					sadd;
+					s2b;
+					baload;
+					bspush 15;
+					sand;
+					bspush 9;
+					if_scmple L17;
+				L16:	sspush 27264;
+					invokestatic 27;		// javacard/framework/ISOException.throwIt(S)V
+					goto L19;
+				L17:	sload 7;
+					sconst_1;
+					sadd;
+					s2b;
+					sstore 7;
+				L18:	sload 7;
+					sload 6;
+					if_scmplt L14;
+				L19:	sconst_1;
 					sreturn;
 		}
 
